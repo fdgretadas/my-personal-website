@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>异常实体收容中心 | 主页</title>
+    <style>
+        :root {
+            --primary: #0a192f;
+            --secondary: #112240;
+            --accent: #64ffda;
+            --text: #ccd6f6;
+            --text-secondary: #8892b0;
+            --danger: #ff5555;
+            --background: #0c182c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, #020c1b 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none; /* 隐藏默认鼠标指针 */
+        }
+
+        /* 小狗图标样式 */
+        .dog-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .dog-body {
+            width: 40px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            transform-origin: center;
+        }
+
+        .dog-head {
+            width: 30px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 40% 40% 35% 35%;
+            position: absolute;
+            top: -15px;
+            left: 5px;
+        }
+
+        .dog-ear {
+            width: 15px;
+            height: 20px;
+            background: #5D4037;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+        }
+
+        .ear-left {
+            top: -10px;
+            left: -5px;
+            transform: rotate(-20deg);
+        }
+
+        .ear-right {
+            top: -10px;
+            right: -5px;
+            transform: rotate(20deg);
+        }
+
+        .dog-eye {
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+        }
+
+        .eye-left {
+            left: 8px;
+        }
+
+        .eye-right {
+            right: 8px;
+        }
+
+        .dog-nose {
+            width: 8px;
+            height: 5px;
+            background: #000;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: 5px;
+            left: 11px;
+        }
+
+        .dog-tail {
+            width: 20px;
+            height: 5px;
+            background: #8B4513;
+            border-radius: 0 5px 5px 0;
+            position: absolute;
+            right: -15px;
+            bottom: 10px;
+            transform-origin: left;
+            transform: rotate(0deg);
+            animation: wag 0.5s infinite alternate;
+        }
+
+        @keyframes wag {
+            from { transform: rotate(-10deg); }
+            to { transform: rotate(10deg); }
+        }
+
+        /* 头部导航 */
+        header {
+            background-color: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 8rem 0 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--accent), #4facfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: slidein 2s ease-out;
+        }
+
+        @keyframes slidein {
+            from {
+                margin-left: 100%;
+                width: 150%;
+            }
+            to {
+                margin-left: 0%;
+                width: 100%;
+            }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: var(--primary);
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        /* 档案卡片 */
+        .section-title {
+            text-align: center;
+            margin: 4rem 0 2rem;
+            font-size: 2.5rem;
+            color: var(--accent);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: "";
+            display: block;
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
+            margin: 0.5rem auto;
+        }
+
+        .archives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .archive-card {
+            background: rgba(17, 34, 64, 0.5);
+            border-radius: 10px;
+            padding: 2rem;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .archive-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(100, 255, 218, 0.05), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+        }
+
+        .archive-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .archive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .archive-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .entity-id {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .entity-status {
+            background: rgba(255, 85, 85, 0.2);
+            color: var(--danger);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .card-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .property {
+            background: rgba(10, 25, 47, 0.7);
+            padding: 0.8rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        .property h4 {
+            margin-bottom: 0.3rem;
+            font-size: 1rem;
+        }
+
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            margin: 3rem 0 6rem;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 20px;
+            width: 2px;
+            height: 100%;
+            background: var(--accent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(5px);
+        }
+
+        .timeline-content {
+            background: var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s;
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-content-bottom {
+            background: var(--background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-year {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        /* 页脚 */
+        footer {
+            background: rgba(10, 25, 47, 0.9);
+            padding: 3rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p, .footer-section a {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            display: block;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                margin-left: 80px;
+            }
+
+            .timeline-year {
+                left: -100px !important;
+                right: auto !important;
+            }
+            
+            .archives-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            /* 移动设备上显示默认光标 */
+            body {
+                cursor: auto;
+            }
+            .dog-cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 小狗图标 -->
+    <div class="dog-cursor">
+        <div class="dog-body">
+            <div class="dog-head">
+                <div class="dog-ear ear-left"></div>
+                <div class="dog-ear ear-right"></div>
+                <div class="dog-eye eye-left"></div>
+                <div class="dog-eye eye-right"></div>
+                <div class="dog-nose"></div>
+            </div>
+            <div class="dog-tail"></div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <div class="logo-text">异常监管局</div>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="active">首页</a>
+                <a href="#">档案库</a>
+                <a href="#">研究日志</a>
+                <a href="#">关于我们</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主内容区 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <div class="container">
+                <h1>异常实体收容中心</h1>
+                <p>守护现实边界，收容异常实体，维护世界稳定</p>
+                <a href="#archives" class="cta-button">浏览档案</a>
+            </div>
+        </section>
+
+        <!-- 档案卡片区域 -->
+        <section class="container" id="archives">
+            <h2 class="section-title">精选档案</h2>
+            <div class="archives-grid">
+                <!-- 档案卡片1 - D-1718 -->
+                <div class="archive-card" id="d1718-card">
+                    <div class="card-header">
+                        <div class="entity-id">D-1718</div>
+                        <div class="entity-status">已归档 | 无害化放生</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>代号「墨灼」</h3>
+                        <p>小型犬科动物形态异常实体，具备异常剥离与收容能力，对现实结构具有无邹特性。</p>
+                        <div class="properties-grid">
+                            <div class="property">
+                                <h4>危险等级</h4>
+                                <p>安全</p>
+                            </div>
+                            <div class="property">
+                                <h4>发现时间</h4>
+                                <p>1763年</p>
+                            </div>
+                            <div class="property">
+                                <h4>当前状态</h4>
+                                <p>已放生</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 档案卡片2 -->
+                <div class="archive-card">
+                    <div class="card-header">
+                        <div class="entity-id">E-0420</div>
+                        <div class="entity-status">收容中 | 稳定</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>代号「影织者」</h3>
+                        <p>能够操控影子维度的实体，可在阴影中自由移动并创造临时空间通道。</p>
+                        <div class="properties-grid">
+                            <div class="property">
+                                <h4>危险等级</h4>
+                                <p>中等</p>
+                            </div>
+                            <div class="property">
+                                <h4>发现时间</h4>
+                                <p>1987年</p>
+                            </div>
+                            <div class="property">
+                                <h4>当前状态</h4>
+                                <p>收容中</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 档案卡片3 -->
+                <div class="archive-card">
+                    <div class="card-header">
+                        <div class="entity-id">S-1107</div>
+                        <div class="entity-status">观察中 | 低威胁</div>
+                    </div>
+                    <div class="card-content">
+                        <h3>代号「静默者」</h3>
+                        <p>能够创造局部静默区域的实体，在该区域内所有声音传播都会被抑制。</p>
+                        <div class="properties-grid">
+                            <div class="property">
+                                <h4>危险等级</h4>
+                                <p>低</p>
+                            </div>
+                            <div class="property">
+                                <h4>发现时间</h4>
+                                <p>2015年</p>
+                            </div>
+                            <div class="property">
+                                <h4>当前状态</h4>
+                                <p>观察中</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 时间线区域 -->
+        <section class="container">
+            <h2 class="section-title">近期事件</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-year">2023-10</div>
+                    <div class="timeline-content">
+                        <h3>新实体发现</h3>
+                        <p>在北极圈附近发现新型异常实体，代号「冰晶使者」，初步判断具有操控局部气候的能力。</p>
+                    </div>
+                    <div class="timeline-content-bottom">发现地点：北极圈斯瓦尔巴群岛附近，已派遣研究小组前往调查。——研究主管·张伟</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2023-08</div>
+                    <div class="timeline-content">
+                        <h3>收容协议升级</h3>
+                        <p>对E-0420「影织者」的收容协议进行全面升级，新增多重安全防护措施。</p>
+                    </div>
+                    <div class="timeline-content-bottom">升级内容包括：影子维度探测系统、紧急封锁协议、实体行为监测AI。——安全主管·陈明</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2023-06</div>
+                    <div class="timeline-content">
+                        <h3>国际合作</h3>
+                        <p>与全球异常研究组织(GARO)建立正式合作关系，共享研究成果与收容技术。</p>
+                    </div>
+                    <div class="timeline-content-bottom">合作协议涵盖：信息共享、技术交流、联合研究项目。——局长·王建国</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>异常监管局</h3>
+                    <p>致力于收容、研究异常实体，维护现实稳定与人类安全。</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <a href="#">首页</a>
+                    <a href="#">档案库</a>
+                    <a href="#">研究日志</a>
+                    <a href="#">关于我们</a>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <p>邮箱: contact@anomaly-control.gov</p>
+                    <p>电话: +86-XXX-XXXX-XXXX</p>
+                    <p>地址: 中国北京市朝阳区异常研究基地</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 异常实体收容中心 版权所有 | 保密等级: 机密</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 为档案卡片添加点击特效
+        document.querySelectorAll('.archive-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // 为时间线条目添加点击特效
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const content = item.querySelector('.timeline-content');
+                content.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.3)';
+                setTimeout(() => {
+                    content.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+                }, 300);
+            });
+        });
+
+        // 小狗图标跟随鼠标
+        const dogCursor = document.querySelector('.dog-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let dogX = 0;
+        let dogY = 0;
+        let speed = 0.1;
+
+        // 监听鼠标移动
+        document.addEventListener('mousemove', (e) => {
+            // 使用clientX和clientY而不是pageX和pageY
+            // 这样小狗图标会固定在视口内，不会随页面滚动而移动
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // 平滑跟随动画
+        function animateDog() {
+            // 计算小狗位置与鼠标位置的差距
+            let distX = mouseX - dogX;
+            let distY = mouseY - dogY;
+            
+            // 应用缓动效果
+            dogX += distX * speed;
+            dogY += distY * speed;
+            
+            // 设置小狗位置
+            dogCursor.style.left = dogX + 'px';
+            dogCursor.style.top = dogY + 'px';
+            
+            // 根据移动方向旋转小狗
+            let angle = Math.atan2(distY, distX) * 180 / Math.PI;
+            dogCursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+            
+            // 继续动画
+            requestAnimationFrame(animateDog);
+        }
+
+        // 开始动画
+        animateDog();
+
+        // 鼠标悬停时小狗的反应
+        document.querySelectorAll('a, .archive-card, .timeline-item').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                dogCursor.style.transform += ' scale(1.2)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                dogCursor.style.transform = dogCursor.style.transform.replace(' scale(1.2)', '');
+            });
+        });
+
+        // 为D-1718卡片添加跳转功能
+        document.getElementById('d1718-card').addEventListener('click', function() {
+            // 添加点击反馈
+            this.style.transform = 'scale(0.95)';
+            this.style.boxShadow = '0 5px 15px rgba(100, 255, 218, 0.5)';
+            
+            // 延迟跳转，让用户看到反馈效果
+            setTimeout(() => {
+                window.location.href = '档案.html';
+            }, 300);
+        });
+    </script>
+</body>
+</html>

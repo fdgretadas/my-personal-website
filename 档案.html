@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>墨灼档案 | 异常实体收容中心</title>
+    <style>
+        :root {
+            --primary: #0a192f;
+            --secondary: #112240;
+            --accent: #64ffda;
+            --text: #ccd6f6;
+            --text-secondary: #8892b0;
+            --danger: #ff5555;
+            --bbcakground: #0c182c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, #020c1b 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: none; /* 隐藏默认鼠标指针 */
+        }
+
+        /* 小狗图标样式 */
+        .dog-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .dog-body {
+            width: 40px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 50% 50% 40% 40%;
+            position: relative;
+            transform-origin: center;
+        }
+
+        .dog-head {
+            width: 30px;
+            height: 25px;
+            background: #8B4513;
+            border-radius: 40% 40% 35% 35%;
+            position: absolute;
+            top: -15px;
+            left: 5px;
+        }
+
+        .dog-ear {
+            width: 15px;
+            height: 20px;
+            background: #5D4037;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+        }
+
+        .ear-left {
+            top: -10px;
+            left: -5px;
+            transform: rotate(-20deg);
+        }
+
+        .ear-right {
+            top: -10px;
+            right: -5px;
+            transform: rotate(20deg);
+        }
+
+        .dog-eye {
+            width: 6px;
+            height: 6px;
+            background: #000;
+            border-radius: 50%;
+            position: absolute;
+            top: 5px;
+        }
+
+        .eye-left {
+            left: 8px;
+        }
+
+        .eye-right {
+            right: 8px;
+        }
+
+        .dog-nose {
+            width: 8px;
+            height: 5px;
+            background: #000;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: 5px;
+            left: 11px;
+        }
+
+        .dog-tail {
+            width: 20px;
+            height: 5px;
+            background: #8B4513;
+            border-radius: 0 5px 5px 0;
+            position: absolute;
+            right: -15px;
+            bottom: 10px;
+            transform-origin: left;
+            transform: rotate(0deg);
+            animation: wag 0.5s infinite alternate;
+        }
+
+        @keyframes wag {
+            from { transform: rotate(-10deg); }
+            to { transform: rotate(10deg); }
+        }
+
+        /* 头部导航 */
+        header {
+            background-color: rgba(10, 25, 47, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* 主内容区 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, var(--accent), #4facfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: slidein 2s ease-out;
+            /* animation-duration: 3s;
+            animation-name: slidein; */
+        }
+
+        @keyframes slidein {
+            from {
+                margin-left: 100%;
+                width: 150%;
+            }
+
+            to {
+                margin-left: 0%;
+                width: 100%;
+            }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* 档案卡片 */
+        .archive-card {
+            background: rgba(17, 34, 64, 0.5);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .archive-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .archive-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        .entity-id {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .entity-status {
+            background: rgba(255, 85, 85, 0.2);
+            color: var(--danger);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .card-content p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .property {
+            background: rgba(10, 25, 47, 0.7);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .property h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+        /* 时间线 */
+        .timeline {
+            position: relative;
+            margin: 3rem 0;
+            padding-left: 40px;
+        }
+
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 20px;
+            width: 2px;
+            height: 100%;
+            background: var(--accent);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(5px);
+        }
+
+        .timeline-content {
+            background: var(--secondary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s;
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .timeline-content-bottom {
+            background: var(--bbcakground);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s;
+        }
+
+        .timeline-year {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 120px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: var(--accent);
+            color: var(--primary);
+            font-weight: bold;
+            border-radius: 4px;
+        }
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                margin-left: 80px;
+            }
+
+            .timeline-year {
+                left: -100px !important;
+                right: auto !important;
+            }
+            
+            /* 移动设备上显示默认光标 */
+            body {
+                cursor: auto;
+            }
+            .dog-cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 小狗图标 -->
+    <div class="dog-cursor">
+        <div class="dog-body">
+            <div class="dog-head">
+                <div class="dog-ear ear-left"></div>
+                <div class="dog-ear ear-right"></div>
+                <div class="dog-eye eye-left"></div>
+                <div class="dog-eye eye-right"></div>
+                <div class="dog-nose"></div>
+            </div>
+            <div class="dog-tail"></div>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                <div class="logo-text">异常监管局</div>
+            </div>
+            <div class="nav-links">
+                <a href="主页.html">首页</a>
+                <a href="#">档案库</a>
+                <a href="#">研究日志</a>
+                <a href="#">关于我们</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 主内容区 -->
+    <main>
+        <!-- 英雄区域 -->
+        <section class="hero">
+            <div class="container">
+                <h1>D-1718</h1>
+                <p>D-1718（代号「墨灼」）为一种具有自主意识的异常实体，常态呈现为小型犬科动物形态（通体漆黑）。实体具备三种形态转换能力，核心能力为「异常剥离与收容」，对现实结构具有「无邹」特性。</p>
+            </div>
+        </section>
+        <div class="container">
+            <!-- 档案卡片 -->
+            <section class="archive-card">
+                <div class="card-header">
+                    <div class="entity-id">D-1718</div>
+                    <div class="entity-status">已归档 | 无害化放生</div>
+                </div>
+                <div class="card-content">
+                    <h3>实体描述</h3>
+                    <p>D-1718（代号「墨灼」）为一种具有自主意识的异常实体，常态呈现为小型犬科动物形态（通体漆黑）。实体具备三种形态转换能力，核心能力为「异常剥离与收容」，对现实结构具有「无邹」特性。</p>
+                    
+                    <div class="properties-grid">
+                        <div class="property">
+                            <h4>形态变化</h4>
+                            <p>本态（墨渍）→ 常态（黑犬）→ 侵入异态（墨绿火焰）</p>
+                        </div>
+                        <div class="property">
+                            <h4>核心能力</h4>
+                            <p>异常剥离与固化囚禁</p>
+                        </div>
+                        <div class="property">
+                            <h4>本质属性</h4>
+                            <p>正义 | 现实维护者</p>
+                        </div>
+                        <div class="property">
+                            <h4>同化率</h4>
+                            <p>95% (仅限能力使用期间)</p>
+                        </div>
+                        <div class="property">
+                            <h4>侵蚀率</h4>
+                            <p>1% (仅限能力使用期间)</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 时间线 -->
+            <section class="timeline">
+                <h2 style="text-align:center; margin-bottom:2rem; color:var(--accent)">观测时间线</h2>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">1763-2063</div>
+                    <div class="timeline-content">
+                        <h3>初期观测阶段</h3>
+                        <p>“那摊墨渍动了……”，“墨水变成了一只狗。”，“暂时确认为‘无威胁’实体。”</p>
+                    </div>
+                    <div class="timeline-content-bottom">自收容日：1763年04月18日至2063年04月18日，已确认为无威胁友善实体。——监管员·唐凯</div>
+                
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2063-2064</div>
+                    <div class="timeline-content">
+                        <h3>能力觉醒事件</h3>
+                        <p>“它！它！把人吃了！”，“‘异常侵入’罪犯生命体征正常，罪犯意识清晰。”，“侵入罪犯的‘异常实体’已确认从‘同化’状态转化成特殊状态：‘固化·异常实体收容·单晶体’，暂且这么说吧，毕竟实体之间存在收容（囚禁）本能还真是少见。（简：本实体具有可以把"异常实体"从人类等生命体剥离，并且以固体形态存在一段时间，时间由危险度而定。）”</p>
+                    </div>
+                    <div class="timeline-content-bottom">自收容日：2063年04月18日至2064年07月18日，已确认拥有便携收容低危害实体的本能。——总督监察·陈铭</div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-year">2064</div>
+                    <div class="timeline-content">
+                        <h3>性质重定义</h3>
+                        <p>“第一个亲和人类出现，已确认同化率‘95%’（可调用实体的最大能力程度），侵蚀率‘1%’。”（实体对使用者内心的侵蚀最大程度），“经考察，该实体与心地善良或心存正义之人普遍亲和程度偏高。”，“已确认本质属性：‘正义’。”</p>
+                    </div>
+                    <div class="timeline-content-bottom">自收容日：2064年07月18日至2064年08月18日，已确认其本质属性为"正义"，实施"无害化放生"（找一个亲和程度高的当拥有者。）——副局长·李春风</div>
+                </div>
+            </section>
+        </div>
+        <div class="container">
+            <section class="archive-card">
+                <div class="card-header">
+                    <div class="entity-id">现持有者：李星云</div>
+                    <div class="entity-status">查看权限：无</div>
+                </div>
+                <h3>拥有者开放档案</h3>
+                <p>分部[除魔观]拥有者, 现任职于[异常实体收容中心]，拥有异常实体档案D-1718。</p>
+            </section>
+        </div>
+    </main>
+    <script>
+        // 为档案卡片添加点击特效
+        document.querySelectorAll('.archive-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // 为时间线条目添加点击特效
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const content = item.querySelector('.timeline-content');
+                content.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.3)';
+                setTimeout(() => {
+                    content.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
+                }, 300);
+            });
+        });
+
+        // 小狗图标跟随鼠标
+        const dogCursor = document.querySelector('.dog-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let dogX = 0;
+        let dogY = 0;
+        let speed = 0.1;
+
+        // 监听鼠标移动
+        document.addEventListener('mousemove', (e) => {
+            // 使用clientX和clientY而不是pageX和pageY
+            // 这样小狗图标会固定在视口内，不会随页面滚动而移动
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // 平滑跟随动画
+        function animateDog() {
+            // 计算小狗位置与鼠标位置的差距
+            let distX = mouseX - dogX;
+            let distY = mouseY - dogY;
+            
+            // 应用缓动效果
+            dogX += distX * speed;
+            dogY += distY * speed;
+            
+            // 设置小狗位置
+            dogCursor.style.left = dogX + 'px';
+            dogCursor.style.top = dogY + 'px';
+            
+            // 根据移动方向旋转小狗
+            let angle = Math.atan2(distY, distX) * 180 / Math.PI;
+            dogCursor.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+            
+            // 继续动画
+            requestAnimationFrame(animateDog);
+        }
+
+        // 开始动画
+        animateDog();
+
+        // 鼠标悬停时小狗的反应
+        document.querySelectorAll('a, .archive-card, .timeline-item').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                dogCursor.style.transform += ' scale(1.2)';
+            });
+            
+            element.addEventListener('mouseleave', () => {
+                dogCursor.style.transform = dogCursor.style.transform.replace(' scale(1.2)', '');
+            });
+        });
+    </script>
+</body>
+</html>
